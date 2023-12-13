@@ -1,4 +1,8 @@
 package com.example.todo
 
-class Item(val name: String, val done: Boolean) {
+import com.google.firebase.firestore.DocumentId
+
+data class Item( var name: String? = null, var done: Boolean = false, @DocumentId var uid: String = "") {
+
+
 }
