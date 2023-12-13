@@ -1,25 +1,40 @@
 package com.example.todo
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var rvItems: RecyclerView
+    private val auth = Firebase.auth
 
-    private val items = mutableListOf<Item>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
-        rvItems = findViewById(R.id.rvItems)
-        rvItems.layoutManager = LinearLayoutManager(this)
+    override fun onResume() {
+        super.onResume()
+        var fragment= Fragment()
+        if(auth.currentUser != null) {
+            fragment = ItemsFragment()
+        } else {
+            fragment = LoginFragment()
+        }
+        switchFragment(null, fragment)
+    }
 
-        val adapter = ItemAdapter(this, items)
-        rvItems.adapter = adapter
+
+    fun switchFragment(view: View?, nextFragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.flMain, nextFragment, "gameIntroFragment")
+        transaction.commit()
 
     }
+
 }
